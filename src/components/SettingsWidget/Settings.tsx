@@ -1,15 +1,15 @@
 import React from 'react';
-import axios from 'axios';
 
+import { requestWeather } from '../../actions/weatherAPI';
 import { AiOutlineEnter, AiOutlineMenu } from 'react-icons/ai';
 import { IoMdClose } from 'react-icons/io';
 import { HiOutlineTrash } from 'react-icons/hi';
-import { AppContext } from '../weather-widget/WeatherWidget';
+import { AppContext, WeatherContext } from '../../App';
 
 import './index.scss';
 
 const Settings: React.FC = () => {
-  const { cities, setCities, setActiveSettings } = React.useContext<any>(AppContext);
+  const { cities, setCities, setActiveSettings } = React.useContext<AppContext>(WeatherContext);
   const [inputValue, setInputValue] = React.useState<string>('');
   const [currentItem, setCurrentItem] = React.useState<string>(null);
   const [warning, setWarning] = React.useState<boolean>(false);
@@ -19,12 +19,11 @@ const Settings: React.FC = () => {
   }, [inputValue]);
 
   React.useEffect(() => {
-    localStorage.setItem('cities', cities);
+    localStorage.setItem('cities', cities.join(','));
   }, [cities]);
 
   const addLocation = async () => {
-    await axios
-      .get(`http://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=4b890c41902780c1957c7c89885be6c3&units=metric`)
+    await requestWeather(inputValue)
       .then(() => {
         setCities((prev: string[]) => [...prev, inputValue]);
         setInputValue('');

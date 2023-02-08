@@ -1,24 +1,23 @@
 import React from 'react';
-import axios from 'axios';
 
 import { AiOutlineEnter } from 'react-icons/ai';
-import { AppContext } from '../weather-widget/WeatherWidget';
+import { AppContext, WeatherContext } from '../../App';
+import { requestWeather } from '../../actions/weatherAPI';
 
 import './index.scss';
 
 const ModalLocation = () => {
-  const { setActiveModal, setCities } = React.useContext<any>(AppContext);
-  const [locationValue, setLocationValue] = React.useState('');
+  const { setActiveModal, setCities } = React.useContext<AppContext>(WeatherContext);
+  const [locationValue, setLocationValue] = React.useState<string>('');
   const [warning, setWarning] = React.useState<boolean>(false);
 
   const enterLocation = async () => {
-    await axios
-      .get(`http://api.openweathermap.org/data/2.5/weather?q=${locationValue}&appid=4b890c41902780c1957c7c89885be6c3&units=metric`)
+    await requestWeather(locationValue)
       .then(() => {
         localStorage.setItem('cities', locationValue);
-        localStorage.setItem('first_time', 'false');
+        localStorage.setItem('first_time', 'true');
         setCities((prev: string[]) => [...prev, locationValue]);
-        setActiveModal(false);
+        setActiveModal(true);
       })
       .catch(() => {
         setWarning(true);
