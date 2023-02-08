@@ -1,0 +1,21 @@
+.weather {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  padding: 15px;
+
+  &__settings {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+
+    & svg {
+      transition: 0.5s;
+
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
