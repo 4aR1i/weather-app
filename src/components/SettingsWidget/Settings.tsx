@@ -13,18 +13,35 @@ const Settings: React.FC = () => {
   const [inputValue, setInputValue] = React.useState<string>('');
   const [currentItem, setCurrentItem] = React.useState<string>(null);
   const [warning, setWarning] = React.useState<boolean>(false);
+  const [duplicate, setDuplicate] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setWarning(false);
+    setDuplicate(false);
   }, [inputValue]);
 
   React.useEffect(() => {
     localStorage.setItem('cities', cities.join(','));
   }, [cities]);
 
+  // const addLocation = async () => {
+  //   await requestWeather(inputValue)
+  //     .then(() => {
+  //       setCities((prev: string[]) => [...prev, inputValue]);
+  //       setInputValue('');
+  //     })
+  //     .catch(() => {
+  //       setWarning(true);
+  //     });
+  // };
+
   const addLocation = async () => {
     await requestWeather(inputValue)
       .then(() => {
+        const findDuplicate = cities.find((city) => city === inputValue);
+        if (findDuplicate) {
+          return setDuplicate(true);
+        }
         setCities((prev: string[]) => [...prev, inputValue]);
         setInputValue('');
       })
@@ -75,7 +92,7 @@ const Settings: React.FC = () => {
       <div className="settings__add-location add-location">
         <h2 className="add-location__title">Add Location:</h2>
         <div className="add-location__block">
-          <input type="text" className={warning ? 'warning' : ''} onChange={(e) => setInputValue(e.target.value)} value={inputValue} placeholder="Enter location" />
+          <input type="text" className={warning || duplicate ? 'warning' : ''} onChange={(e) => setInputValue(e.target.value)} value={inputValue} placeholder="Enter location" />
           <AiOutlineEnter
             onClick={() => {
               addLocation();
@@ -83,6 +100,7 @@ const Settings: React.FC = () => {
           />
         </div>
         {warning ? <p className="modal-warning">Location not found.</p> : ''}
+        {duplicate ? <p className="modal-warning">Location already added.</p> : ''}
       </div>
       <div className="settings__close">
         <IoMdClose onClick={() => setActiveSettings((prev: boolean) => !prev)} />
