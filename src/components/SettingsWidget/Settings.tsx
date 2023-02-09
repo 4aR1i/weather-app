@@ -24,17 +24,6 @@ const Settings: React.FC = () => {
     localStorage.setItem('cities', cities.join(','));
   }, [cities]);
 
-  // const addLocation = async () => {
-  //   await requestWeather(inputValue)
-  //     .then(() => {
-  //       setCities((prev: string[]) => [...prev, inputValue]);
-  //       setInputValue('');
-  //     })
-  //     .catch(() => {
-  //       setWarning(true);
-  //     });
-  // };
-
   const addLocation = async () => {
     await requestWeather(inputValue)
       .then(() => {
