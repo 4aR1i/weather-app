@@ -1,6 +1,6 @@
 import React from 'react';
 
-import WeatherItem from '../WeatherItem/WeatherItem';
+import WeatherCard from '../WeatherCard/WeatherCard';
 import Settings from '../SettingsWidget/Settings';
 import ModalLocation from '../ModalLocation/ModalLocation';
 import { AppContext, WeatherContext } from '../../App';
@@ -30,7 +30,7 @@ const WeatherWidget: React.FC = () => {
 
   return (
     <div className="weather">
-      {cities.length > 0 ? cities.map((item, i) => <WeatherItem key={i} city={item} />) : <p className="weather__absent">Location not selected</p>}
+      {cities.length > 0 ? cities.map((item, i) => <WeatherCard key={i} city={item} />) : <p className="weather__absent">Location not selected</p>}
       <div className="weather__settings" onClick={() => setActiveSettings((prev: boolean) => !prev)}>
         <FiSettings />
       </div>

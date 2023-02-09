@@ -6,11 +6,11 @@ import { useWeatherApi } from '../../actions/weatherAPI';
 
 import './index.scss';
 
-type WeatherItemProps = {
+type WeatherCardProps = {
   city: string;
 };
 
-const WeatherItem: React.FC<WeatherItemProps> = ({ city }) => {
+const WeatherCard: React.FC<WeatherCardProps> = ({ city }) => {
   const weatherRequest = useWeatherApi(city);
 
   if (weatherRequest.loading) {
@@ -18,9 +18,12 @@ const WeatherItem: React.FC<WeatherItemProps> = ({ city }) => {
   }
 
   const weatherDescrip = weatherRequest.data.weather[0].description.split('')[0].toUpperCase() + weatherRequest.data.weather[0].description.split('').slice(1).join('');
+  const d = new Date();
+  let nowDate = d.toString().split(' ').slice(1, 3).join(' ') + ', ' + d.toString().split(' ').slice(4, 5).join('').split(':').slice(0, 2).join(':');
 
   return (
     <div className="weather__item item">
+      <span className="item__date">{nowDate}</span>
       <h1 className="item__place">
         {weatherRequest.data.name}, {weatherRequest.data.sys.country}
       </h1>
@@ -82,4 +85,4 @@ const WeatherItem: React.FC<WeatherItemProps> = ({ city }) => {
   );
 };
 
-export default WeatherItem;
+export default WeatherCard;
